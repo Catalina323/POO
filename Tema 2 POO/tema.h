@@ -146,7 +146,7 @@ public:
 
 	void AdaugareContract()
 	{
-		nr++;
+		//nr++;
 		std::cout<< "Dati tipul de contract pe care vreti sa il cititi ('contract' sau 'contract_inchiriere'): " << std::endl;
 		std::string opt;
 		try
@@ -155,6 +155,7 @@ public:
 
 			if (opt == "contract")
 			{
+				nr++;
 				std::shared_ptr<Contract> x = std::make_shared<Contract>();
 				std::cin >> *x;
 				v.push_back(x);
@@ -162,7 +163,7 @@ public:
 			else
 				if (opt.compare("contract_inchiriere") == 0)
 				{
-					std::cout << "citeste contract inchiriere" << std::endl;
+					nr++;
 					std::shared_ptr<ContractInchiriere> x = std::make_shared<ContractInchiriere>();
 					std::cin >> *x;
 					v.push_back(x);
@@ -185,7 +186,7 @@ public:
 
 		for (int i = 0;i < numar_contr;i++)
 		{
-			nr++;
+			//nr++;
 			std::string optiune;
 			std::cout << "Dati tipul de contract pe care vreti sa il cititi ('contract' sau 'contract_inchiriere'): " << std::endl;
 			try
@@ -194,6 +195,7 @@ public:
 
 				if (optiune == "contract")
 				{
+					nr++;
 					std::shared_ptr<Contract> x = std::make_shared<Contract>();
 					std::cin >> *x;
 					v.push_back(x);
@@ -201,14 +203,16 @@ public:
 				else
 					if (optiune.compare("contract_inchiriere") == 0)
 					{
+						nr++;
 						std::cout << "citeste contract inchiriere" << std::endl;
 						std::shared_ptr<ContractInchiriere> x = std::make_shared<ContractInchiriere>();
 						std::cin >> *x;
 						v.push_back(x);
 					}
 					else
+					{
 						throw std::invalid_argument("Introduceti una din cele 2 variante propuse: 'contract' sau 'contract inchiriere'");
-
+					}
 			}
 			catch (const std::invalid_argument& e)
 			{
@@ -221,7 +225,7 @@ public:
 
 	void Afis()
 	{
-		for (int i = 0;i < numar_contr;i++)
+		for (int i = 0;i < nr;i++)
 		{
 			v[i]->Afis();
 			std::cout << std::endl;
@@ -244,7 +248,7 @@ public:
 	{
 		static int suma = 0;
 
-		for (int i = 0;i < numar_contr;i++)
+		for (int i = 0;i < nr;i++)
 		{
 			if (typeid(*v[i]) == typeid(ContractInchiriere))
 			{
