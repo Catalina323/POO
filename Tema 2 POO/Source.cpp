@@ -40,147 +40,19 @@ Se citesc contractele din dosar, se afiseaza si se cere sa se calculeze valoarea
 pentru fiecare contract in functie de perioada, respectiv valoarea totala incasata
 */
 
-
 #include <iostream>
-
-class Contract	//Baza
-{protected:
-	int nr_contract;
-	int an;
-	std::string nume_cumparator;
-	std::string nume_furnizor;
-	int valoare_totala;
-
-public:
-	Contract() = default;
-	
-	Contract(const int nr_contract,const int an,const std::string& nume_cumparator,const std::string& nume_furnizor,const int valoare_totala)
-	{
-		this->nr_contract = nr_contract;
-		this->an = an;
-		this->nume_cumparator = nume_cumparator;
-		this->nume_furnizor = nume_furnizor;
-		this->valoare_totala = valoare_totala;
-		//std::cout << "constructor cu parametru contract" << std::endl;
-	}
-	virtual ~Contract(){}
-
-	friend std::istream& operator>>(std::istream&, Contract&);
-	friend std::ostream& operator<<(std::ostream&, Contract&);
-
-	virtual void Afis()
-	{
-		std::cout << nr_contract << " " << an << " " << nume_cumparator << " " << nume_furnizor << " " << valoare_totala << " ";
-	}
-
-};
-
-std::istream& operator>>(std::istream& in, Contract& c)
-{
-	std::cout << "numar contract: ";
-	in >> c.nr_contract;
-	std::cout << "an: ";
-	in >> c.an;
-	std::cout << "nume cumparator: ";
-	in >> c.nume_cumparator;
-	std::cout << "nume furnizor: ";
-	in >> c.nume_furnizor;
-	std::cout << "valoarea totala: ";
-	in >> c.valoare_totala;
-
-	return in;
-}
-
-std::ostream& operator<<(std::ostream& out, Contract& c)
-{
-	out << c.nr_contract << " " << c.an << " " << c.nume_cumparator << " " << c.nume_furnizor << " " << c.valoare_totala;
-
-	return out;
-}
-
-
-class ContractInchiriere : public Contract	//Derivata
-{
-	int durata;		// exprimata in nr luni
-
-public:
-	ContractInchiriere() = default;
-	
-	ContractInchiriere(const int nr_contract, const int an,const std::string& nume_cumparator,const std::string& nume_furnizor,const int valoare_totala, int durata)
-	{
-		this->nr_contract = nr_contract;
-		this->an = an;
-		this->nume_cumparator = nume_cumparator;
-		this->nume_furnizor = nume_furnizor;
-		this->valoare_totala = valoare_totala;
-		this->durata = durata;
-		//std::cout << "constructor cu parametrii contract inchiriere" << std::endl;
-	}
-	~ContractInchiriere(){}
-
-	friend std::istream& operator>>(std::istream&, ContractInchiriere&);
-	friend std::ostream& operator<<(std::ostream&, ContractInchiriere&);
-
-	void Afis()
-	{
-		Contract::Afis();
-		std::cout << durata;
-	}
-
-};
-
-std::istream& operator>>(std::istream& in, ContractInchiriere& c)
-{
-	std::cout << "numar contract: ";
-	in >> c.nr_contract;
-	std::cout << "an: ";
-	in >> c.an;
-	std::cout << "nume cumparator: ";
-	in >> c.nume_cumparator;
-	std::cout << "nume furnizor: ";
-	in >> c.nume_furnizor;
-	std::cout << "valoarea totala: ";
-	in >> c.valoare_totala;
-	std::cout << "durata: ";
-	in >> c.durata;
-
-	return in;
-}
-
-std::ostream& operator<< (std::ostream& out, ContractInchiriere& c)
-{
-	out << c.nr_contract << " " << c.an << " " << c.nume_cumparator << " " << c.nume_furnizor << " " << c.valoare_totala << " " << c.durata;
-	return out;
-}
-
-
-class Dosar
-{
-	ContractInchiriere * v = new ContractInchiriere[100];
-	int numar_contr;
-
-public:
-
-	Dosar() = default;
-
-	void citire()
-	{
-		std::cout << "Numar contracte: ";
-		std::cin >> numar_contr;
-
-		for (int i = 0;i < numar_contr;i++)
-		{
-			std::cin >> v[i];
-		}
-	}
-};
-
+#include <vector>
+#include "tema.h"
 
 int main()
 {
+	// UPDATE: UN DOSAR POATE SA CUPRINDA AMBELE TIPURI DE CONTRACTE (SIMPLU SI DE INCHIRIERE)
+
 	//Contract c1;
 	//ContractInchiriere c2;
 	//Contract c3(2, 3, "ba", "bf", 5);
+	//c1 = c3;
+	//std::cout << c1 << std::endl;
 	//ContractInchiriere c4(1, 2, "a", "b", 3, 4);
 	//c3.Afis();
 	//c4.Afis();
@@ -194,9 +66,97 @@ int main()
 	c6->Afis();
 	*/
 
+	int op;
 	Dosar d;
-	d.citire();
 
+	while (true)
+	{
+		std::cout << "Cititi un dosar nou? (da = '1' sau nu = '2')" << std::endl;
+
+		try
+		{
+			std::cin >> op;
+			switch (op)
+			{
+			case(1):
+			{
+				std::cout << "Cititi contractele din dosar: " << std::endl;
+				d.citire();
+
+				std::cout << "Ce doriti sa faceti in continuare?" << std::endl;
+				std::cout << "'1'= afisati toate contractele" << std::endl;
+				std::cout << "'2'= cititi nr contractului pe care doriti sa il afisati" << std::endl;
+				std::cout << "'3'= afisasti valoarea dosarului" << std::endl;
+				std::cout << "'4'= adaugati contract" << std::endl;
+				std::cout << "'5'= afisati numarul de contracte din dosar" << std::endl;;
+				std::cout << "'6'= iesire" << std::endl;
+
+				int op2;
+				bool ok = true;
+				while (ok)
+				{
+					try
+					{
+						std::cin >> op2;
+						switch (op2)
+						{
+						case(1):
+						{
+							std::cout << "Contractele citite sunt: " << std::endl;
+							d.Afis();
+							break;
+						}
+						case(2):
+						{
+							int nr;
+							std::cout << "introduceti nr dosarului pe care doriti sa il afisati:";
+							std::cin >> nr;
+							d.Afis(nr);
+							break;
+						}
+						case(3):
+						{
+							std::cout << "Valoarea dosarului este: " << std::endl;
+							d.valoare_dosar();
+							break;
+						}
+						case(4):
+						{
+							d.AdaugareContract();
+							break;
+						}
+						case(5):
+						{
+							std::cout << "numarul de contracte din dosar este: ";
+							d.getNr();
+							break;
+						}
+						case(6):
+							//return 0;
+							ok = false;
+							break;
+						default:
+							throw std::invalid_argument("Introduceti doar '1' '2' '3' sau '4'");
+						}
+					}
+					catch (const std::invalid_argument& e)
+					{
+						std::cerr << "Error: " << e.what() << std::endl;
+					}
+				}
+				break;
+			}
+			case(2):
+				return 0;
+			default:
+				throw std::invalid_argument("Introduceti doar '1' sau '2'");
+			}
+		}
+		catch (const std::invalid_argument& e)
+		{
+			std::cerr << "Error: " << e.what() << std::endl;
+		}
+	}
 
 	return 0;
 }
