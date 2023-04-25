@@ -132,11 +132,10 @@ int main()
 							break;
 						}
 						case(6):
-							//return 0;
 							ok = false;
 							break;
 						default:
-							throw std::invalid_argument("Introduceti doar '1' '2' '3' sau '4'");
+							throw std::invalid_argument("Introduceti doar '1' '2' '3' '4' '5' sau '6'");
 						}
 					}
 					catch (const std::invalid_argument& e)
