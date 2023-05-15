@@ -8,9 +8,8 @@
 #include <iostream>
 #include <vector>
 
-
 //object pool
-class client {
+class loc_coada {
 private:
 	bool loc = false;
 
@@ -18,16 +17,16 @@ public:
 	void open() { loc = true; }
 	void close() { loc = false; }
 	bool free() const { return !loc; }
-	~client() { close(); }
+	~loc_coada() { close(); }
 };
 
 class coada {
 private:
 	static const int nr = 4;
-	std::vector<client> vect{ nr };
+	std::vector<loc_coada> vect{ nr };
 
 public:
-	client get_loc()
+	loc_coada& get_loc()
 	{
 		for (auto& l : vect)
 		{
@@ -38,6 +37,18 @@ public:
 			}
 		}
 		throw std::runtime_error("prea multi oameni la coada! asteptati pana se elibereaza un loc!");
+	}
+
+	loc_coada& give_loc()
+	{
+		for (auto& l : vect)
+		{
+			if (!(l.free()))
+			{
+				l.close();
+				return l;
+			}
+		}
 	}
 };
 
@@ -51,7 +62,8 @@ class shaorma {
 	std::string legume;
 
 public:
-	
+
+	shaorma() = default;
 	shaorma(std::string carnita, std::string cartofi, std::string sos, std::string legume)
 	{
 		this->carnita = carnita;
@@ -59,8 +71,14 @@ public:
 		this->legume = legume;
 		this->sos = sos;
 	}
-};
 
+	virtual void afis()
+	{
+		std::cout << "shaorma cu carne de " << carnita << ", cartofi " << cartofi << ", " << legume << " si " << sos;
+		std::cout << std::endl;
+	}
+
+};
 
 //factory
 class shaorma_menu {
@@ -68,11 +86,23 @@ class shaorma_menu {
 public:
 	static shaorma cu_de_toate() { return shaorma("pui", "pai", "salata", "usturoi"); }
 	static shaorma vegana() { return shaorma("soia", "pai", "castraveti", "ketchup"); }
-	static shaorma casei() { return shaorma("pui", "pai", "rosii", "chilli"); }
+	static shaorma casei() { return shaorma("porc", "pai", "rosii", "chilli"); }
 	static shaorma traditionala() { return shaorma("pui", "pai", "varza", "maioneza"); }
 
 };
 
+class client
+{
+	shaorma s;
+
+public:
+	client(shaorma s) { this->s = s; }
+	void afis()
+	{
+		s.afis();
+	}
+
+};
 
 
 int main()
@@ -88,6 +118,8 @@ int main()
 	int n;
 	
 	bool ok = true;
+
+	//aici alegem shaormeria de unde vrem sa cumparam
 	while (ok)
 	{
 		try {
@@ -144,6 +176,89 @@ int main()
 		}
 	}
 
+
+	coada c;
+	while (true)
+	{
+		std::cout << "ce doriti sa faceti in continuare?" << std::endl;
+		std::cout << "1 - plasati o comanda" << std::endl;
+		std::cout << "2 - ridicati o comanda" << std::endl;
+		std::cout << "3 - iesire" << std::endl;
+		int opt;
+
+		try {
+			std::cin >> opt;
+
+			switch (opt)
+			{//cazul 1 plasam o comanda
+			case 1:
+			{try
+			{
+				loc_coada& x = c.get_loc();
+
+				std::cout << "Meniul nostru:" << std::endl;
+				std::cout << "1 - shaorma cu de toate" << std::endl;
+				std::cout << "2 - shaorma vegana" << std::endl;
+				std::cout << "3 - shaorma casei" << std::endl;
+				std::cout << "4 - shaorma traditionala" << std::endl;
+
+				int opt2;
+				std::cin >> opt2;
+
+				switch (opt2)
+				{
+				case 1:
+				{
+					client cl(shaorma_menu::cu_de_toate());
+					break;
+				}
+				case 2:
+				{
+					client cl(shaorma_menu::vegana());
+					break;
+				}
+				case 3:
+				{
+					client cl(shaorma_menu::casei());
+					break;
+				}
+				case 4:
+				{
+					client cl(shaorma_menu::traditionala());
+					break;
+				}
+				default:
+					break;
+				}
+			}
+			catch (std::runtime_error& e) { std::cout << e.what() << std::endl; }
+			break;
+			}
+			//cazul 2 pleaca cineva din shaormerie
+			case 2:
+			{
+				std::cout << "Comanda dumneavoastra este gata! S-a eliberat un loc in shaormerie :)" << std::endl;
+				loc_coada& x = c.give_loc();
+
+				break;
+			}
+			//cazul 3 iesire
+			case 3:
+			{
+				return 0;
+			}
+			//cazul default
+			default:
+				throw std::invalid_argument("Introduceti doar '1' sau '2'");
+				break;
+			}
+
+		}
+		catch (std::invalid_argument& e)
+		{
+			std::cerr << "Error " << e.what() << std::endl;
+		}
+	}
 	
 
 
