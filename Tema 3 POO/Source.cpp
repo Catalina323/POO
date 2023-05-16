@@ -72,7 +72,7 @@ public:
 		this->sos = sos;
 	}
 
-	virtual void afis()
+	void afis()
 	{
 		std::cout << "shaorma cu carne de " << carnita << ", cartofi " << cartofi << ", " << legume << " si " << sos;
 		std::cout << std::endl;
@@ -94,14 +94,8 @@ public:
 class client
 {
 	shaorma s;
-
 public:
 	client(shaorma s) { this->s = s; }
-	void afis()
-	{
-		s.afis();
-	}
-
 };
 
 
@@ -182,7 +176,7 @@ int main()
 	{
 		std::cout << "ce doriti sa faceti in continuare?" << std::endl;
 		std::cout << "1 - plasati o comanda" << std::endl;
-		std::cout << "2 - ridicati o comanda" << std::endl;
+		std::cout << "2 - asteptati pana cand se elibereaza un loc" << std::endl;
 		std::cout << "3 - iesire" << std::endl;
 		int opt;
 
@@ -201,6 +195,7 @@ int main()
 				std::cout << "2 - shaorma vegana" << std::endl;
 				std::cout << "3 - shaorma casei" << std::endl;
 				std::cout << "4 - shaorma traditionala" << std::endl;
+				std::cout << "5 - fa-ti propria shaorma!" << std::endl;
 
 				int opt2;
 				std::cin >> opt2;
@@ -210,21 +205,40 @@ int main()
 				case 1:
 				{
 					client cl(shaorma_menu::cu_de_toate());
+					std::cout << "Ati comandat:" << std::endl;
+					shaorma_menu::cu_de_toate().afis();
+
 					break;
 				}
 				case 2:
 				{
 					client cl(shaorma_menu::vegana());
+					std::cout << "Ati comandat:" << std::endl;
+					shaorma_menu::vegana().afis();
 					break;
 				}
 				case 3:
 				{
 					client cl(shaorma_menu::casei());
+					std::cout << "Ati comandat:" << std::endl;
+					shaorma_menu::casei().afis();
 					break;
 				}
 				case 4:
 				{
 					client cl(shaorma_menu::traditionala());
+					std::cout << "Ati comandat:" << std::endl;
+					shaorma_menu::traditionala().afis();
+					break;
+				}
+				case 5:
+				{
+
+
+
+
+
+
 					break;
 				}
 				default:
@@ -237,7 +251,7 @@ int main()
 			//cazul 2 pleaca cineva din shaormerie
 			case 2:
 			{
-				std::cout << "Comanda dumneavoastra este gata! S-a eliberat un loc in shaormerie :)" << std::endl;
+				std::cout << "Cineva si-a ridicat comanda. S-a eliberat un loc in shaormerie :)" << std::endl;
 				loc_coada& x = c.give_loc();
 
 				break;
