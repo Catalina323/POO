@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include<memory>
 
 //object pool
 class loc_coada {
@@ -53,7 +54,6 @@ public:
 };
 
 
-
 class shaorma {
 
 	std::string carnita;
@@ -64,6 +64,7 @@ class shaorma {
 public:
 
 	shaorma() = default;
+	~shaorma() { /*std::cout << "destructor shaorma" << std::endl;*/ }
 	shaorma(std::string carnita, std::string cartofi, std::string sos, std::string legume)
 	{
 		this->carnita = carnita;
@@ -78,6 +79,16 @@ public:
 		std::cout << std::endl;
 	}
 
+	
+	shaorma& operator=(const shaorma& other)
+	{
+		carnita=other.carnita;
+		cartofi = other.cartofi;
+		legume = other.legume;
+		sos = other.sos;
+		return *this;
+	}
+
 };
 
 //factory
@@ -89,14 +100,60 @@ public:
 	static shaorma casei() { return shaorma("porc", "pai", "rosii", "chilli"); }
 	static shaorma traditionala() { return shaorma("pui", "pai", "varza", "maioneza"); }
 
+	~shaorma_menu() { /*std::cout << "destructor shaorma menu" << std::endl;*/ }
 };
 
+class paste {
+	std::string pasta;
+	std::string sos;
+public:
+	paste() = default;
+	~paste() { /*std::cout << "destructor paste" << std::endl;*/ }
+	paste(std::string p , std::string s)
+	{
+		pasta = p;
+		sos = s;
+	}
+	void afis()
+	{
+		std::cout << pasta << " cu sos de " << sos << std::endl;
+	}
+
+};
+
+//factory
+class paste_menu {
+
+public:
+	static paste spaghete() { return paste("spaghete", "rosii"); };
+	static paste pene() { return paste("pene", "parmezan"); }
+
+	~paste_menu() { /*std::cout << "destructor paste menu" << std::endl;*/ }
+};
+
+
+template <typename tip_produs>
 class client
 {
-	shaorma s;
+	std::vector<tip_produs> v;
+
 public:
-	client(shaorma s) { this->s = s; }
+	
+
+	client(tip_produs p)
+	{ 
+		this->p = p; 
+		
+	}
+	client() {  };
+	
+	void cumpara(tip_produs p)
+	{
+		v.push_back(p);
+	}
+
 };
+
 
 
 int main()
@@ -195,7 +252,8 @@ int main()
 				std::cout << "2 - shaorma vegana" << std::endl;
 				std::cout << "3 - shaorma casei" << std::endl;
 				std::cout << "4 - shaorma traditionala" << std::endl;
-				std::cout << "5 - fa-ti propria shaorma!" << std::endl;
+				std::cout << "5 - spaghete" << std::endl;
+				std::cout << "6 - pene" << std::endl;
 
 				int opt2;
 				std::cin >> opt2;
@@ -204,41 +262,70 @@ int main()
 				{
 				case 1:
 				{
-					client cl(shaorma_menu::cu_de_toate());
-					std::cout << "Ati comandat:" << std::endl;
+					client<shaorma> cl;
+					shaorma_menu sm;
+					shaorma s;
+
+					s = sm.cu_de_toate();
+					cl.cumpara(s);
+					std::cout << "Ati comandat: ";
 					shaorma_menu::cu_de_toate().afis();
 
 					break;
 				}
 				case 2:
 				{
-					client cl(shaorma_menu::vegana());
-					std::cout << "Ati comandat:" << std::endl;
+					client<shaorma> cl;
+					shaorma_menu sm;
+					shaorma s;
+					s = sm.vegana();
+					cl.cumpara(s);
+					std::cout << "Ati comandat: " ;
 					shaorma_menu::vegana().afis();
 					break;
 				}
 				case 3:
 				{
-					client cl(shaorma_menu::casei());
-					std::cout << "Ati comandat:" << std::endl;
+					client<shaorma> cl;
+					shaorma_menu sm;
+					shaorma s;
+					s = sm.casei();
+					cl.cumpara(s);
+					std::cout << "Ati comandat: " ;
 					shaorma_menu::casei().afis();
 					break;
 				}
 				case 4:
 				{
-					client cl(shaorma_menu::traditionala());
-					std::cout << "Ati comandat:" << std::endl;
+					client<shaorma> cl;
+					shaorma_menu sm;
+					shaorma s;
+					s = sm.traditionala();
+					cl.cumpara(s);
+					std::cout << "Ati comandat: " ;
 					shaorma_menu::traditionala().afis();
 					break;
 				}
 				case 5:
 				{
-
-
-
-
-
-
+					client<paste> cl;
+					paste_menu pm;
+					paste p;
+					p = pm.spaghete();
+					cl.cumpara(p);
+					std::cout << "Ati comandat: " ;
+					paste_menu::spaghete().afis();
+					break;
+				}
+				case 6:
+				{
+					client<paste> cl;
+					paste_menu pm;
+					paste p;
+					p = pm.pene();
+					cl.cumpara(p);
+					std::cout << "Ati comandat: " ;
+					paste_menu::pene().afis();
 					break;
 				}
 				default:
