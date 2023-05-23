@@ -152,6 +152,12 @@ public:
 		v.push_back(p);
 	}
 
+	void afisVect()
+	{
+		for (auto i = v.begin(); i != v.end(); ++i)
+			(*i).afis();
+	}
+
 };
 
 
@@ -237,6 +243,17 @@ int main()
 		std::cout << "3 - iesire" << std::endl;
 		int opt;
 
+
+		client<shaorma> cs;
+		shaorma_menu sm;
+		shaorma s;
+
+		client<paste> cp;
+		paste_menu pm;
+		paste p;
+
+
+
 		try {
 			std::cin >> opt;
 
@@ -258,16 +275,24 @@ int main()
 				int opt2;
 				std::cin >> opt2;
 
+				/*client<shaorma> cs;
+				shaorma_menu sm;
+				shaorma s;
+
+				client<paste> cp;
+				paste_menu pm;
+				paste p;*/
+
 				switch (opt2)
 				{
 				case 1:
 				{
-					client<shaorma> cl;
+					/*client<shaorma> cl;
 					shaorma_menu sm;
-					shaorma s;
+					shaorma s;*/
 
 					s = sm.cu_de_toate();
-					cl.cumpara(s);
+					cs.cumpara(s);
 					std::cout << "Ati comandat: ";
 					shaorma_menu::cu_de_toate().afis();
 
@@ -275,55 +300,55 @@ int main()
 				}
 				case 2:
 				{
-					client<shaorma> cl;
+					/*client<shaorma> cl;
 					shaorma_menu sm;
-					shaorma s;
+					shaorma s;*/
 					s = sm.vegana();
-					cl.cumpara(s);
+					cs.cumpara(s);
 					std::cout << "Ati comandat: " ;
 					shaorma_menu::vegana().afis();
 					break;
 				}
 				case 3:
 				{
-					client<shaorma> cl;
+					/*client<shaorma> cl;
 					shaorma_menu sm;
-					shaorma s;
+					shaorma s;*/
 					s = sm.casei();
-					cl.cumpara(s);
+					cs.cumpara(s);
 					std::cout << "Ati comandat: " ;
 					shaorma_menu::casei().afis();
 					break;
 				}
 				case 4:
 				{
-					client<shaorma> cl;
+					/*client<shaorma> cl;
 					shaorma_menu sm;
-					shaorma s;
+					shaorma s;*/
 					s = sm.traditionala();
-					cl.cumpara(s);
+					cs.cumpara(s);
 					std::cout << "Ati comandat: " ;
 					shaorma_menu::traditionala().afis();
 					break;
 				}
 				case 5:
 				{
-					client<paste> cl;
+					/*client<paste> cl;
 					paste_menu pm;
-					paste p;
+					paste p;*/
 					p = pm.spaghete();
-					cl.cumpara(p);
+					cp.cumpara(p);
 					std::cout << "Ati comandat: " ;
 					paste_menu::spaghete().afis();
 					break;
 				}
 				case 6:
 				{
-					client<paste> cl;
+					/*client<paste> cl;
 					paste_menu pm;
-					paste p;
+					paste p;*/
 					p = pm.pene();
-					cl.cumpara(p);
+					cp.cumpara(p);
 					std::cout << "Ati comandat: " ;
 					paste_menu::pene().afis();
 					break;
@@ -346,6 +371,10 @@ int main()
 			//cazul 3 iesire
 			case 3:
 			{
+				cs.afisVect();
+				std::cout << std::endl;
+				cp.afisVect();
+
 				return 0;
 			}
 			//cazul default
